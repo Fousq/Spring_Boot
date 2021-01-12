@@ -17,12 +17,12 @@ public class TicketController {
         return ticketRepository.findById(ticketId).orElseThrow(() -> new IllegalStateException("Ticket cannot be found"));
     }
 
-    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/")
     public Ticket createTicket(@RequestBody Ticket ticket) {
         return ticketRepository.save(ticket);
     }
 
-    @PutMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping("/")
     public Ticket updateTicket(@RequestBody Ticket ticket) {
         return ticketRepository.save(ticket);
     }

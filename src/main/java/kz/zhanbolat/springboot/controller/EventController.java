@@ -3,7 +3,6 @@ package kz.zhanbolat.springboot.controller;
 import kz.zhanbolat.springboot.entity.Event;
 import kz.zhanbolat.springboot.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,17 +11,17 @@ public class EventController {
     @Autowired
     private EventRepository eventRepository;
 
-    @GetMapping(value = "/{eventId}")
+    @GetMapping( "/{eventId}")
     public Event getEvent(@PathVariable("eventId") int eventId) {
         return eventRepository.findById(eventId).orElseThrow(() -> new IllegalStateException("Event cannot be found"));
     }
 
-    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/")
     public Event createEvent(@RequestBody Event event) {
         return eventRepository.save(event);
     }
 
-    @PutMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping("/")
     public Event updateEvent(@RequestBody Event event) {
         return eventRepository.save(event);
     }

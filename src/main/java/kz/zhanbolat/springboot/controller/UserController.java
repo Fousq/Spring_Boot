@@ -13,20 +13,18 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping(value = "/{userId}")
+    @GetMapping("/{userId}")
     public User getUser(@PathVariable("userId") int userId) {
         return userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("User cannot be found"));
     }
 
-    @PostMapping(value = "/",
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@RequestBody User user) {
         return userRepository.save(user);
     }
 
-    @PutMapping(value = "/",
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping("/")
     public User updateUser(@RequestBody User user) {
         return userRepository.save(user);
     }
