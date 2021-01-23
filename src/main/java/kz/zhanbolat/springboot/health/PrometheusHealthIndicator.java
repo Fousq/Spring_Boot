@@ -17,21 +17,25 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class PrometheusHealthIndicator implements HealthIndicator {
 
     private static final Logger logger = LoggerFactory.getLogger(PrometheusHealthIndicator.class);
 
-    @Autowired
-    @Value("${app.prometheus.url}")
-    private String prometheusUrl;
+    @Autowired(required = false)
+    @Value("${app.prometheus.url:#{null}}")
+    private Optional<String> prometheusUrl;
 
     @Override
     public Health health() {
-        ClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        if (!prometheusUrl.isPresent()) {
+            return Health.down().withDetail("Value not present", "Prometheus url is not provided").build();
+        }
         try {
-            final ClientHttpRequest request = requestFactory.createRequest(URI.create(prometheusUrl), HttpMethod.GET);
+            ClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+            final ClientHttpRequest request = requestFactory.createRequest(URI.create(prometheusUrl.get()), HttpMethod.GET);
             final ClientHttpResponse response = request.execute();
             if (!Objects.equals(response.getStatusCode(), HttpStatus.OK)) {
                 return Health.down().withDetail("Unknown response from prometheus", response.getStatusText()).build();
